@@ -1,4 +1,6 @@
-source "https://rubygems.org"
+# frozen_string_literal: true
 
-# Specify your gem's dependencies in dataCollector.gemspec
-gemspec
+source 'https://rubygems.org'
+
+gem 'digest-crc'
+gem 'rmodbus'
