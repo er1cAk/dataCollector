@@ -1,18 +1,27 @@
-require '../lib/dataCollector/modbusRTUviaTCP'
 require '../lib/dataCollector/raurora'
-require 'socket'
-require 'digest/crc16_qt'
-require 'rmodbus'
+require '../lib/dataCollector/databaseAdapter'
+require '../lib/dataCollector/auroraRTU'
+require '../lib/dataCollector/modbusRTUviaTCP'
 
 module DataCollector
-  class Error < StandardError; end
-  # auroraProtocol = AuroraProtocol.new('192.168.24.10')
-  # auroraProtocol.connect
-  # puts auroraProtocol.send(11, 50)
-  # # ModBus::TCPClient.new('192.168.20.10') do |cl|
-  #   # cl.with_slave(3) do |slave|
-  # #     puts slave.input_registers[1949]
-  # #   end
-  # # end
+
+  @devices = (DatabaseAdapter.new.get_devices(ARGV[0]))
+
+  @devices.select do |device|
+    if device["access_point"]
+      case device["protocol"]
+      when 1
+        @protocol = AuroraRTU.new(device["address"])
+      when 2
+        @protocol = ModbusRTUviaTCP.new(device["address"])
+      else
+        @protocol = nil
+      end
+      @devices.delete(device)
+    end
+  end
+
+  puts @protocol.read_inverters(@devices)
+
 
 end
