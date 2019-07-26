@@ -18,11 +18,6 @@ module DataCollector
       end
     end
 
-    def read_state(address)
-      puts @aurora_protocol.send(address, 50)
-    end
-
-
     def read_voltage(address)
       puts @aurora_protocol.send(address, 59, 1)
     end
@@ -32,12 +27,23 @@ module DataCollector
     end
 
     def read_power(address)
-      power = @aurora_protocol.send(address, 59, 3)
-      print power
-      puts
-      print power[2..5].reverse
-      result = power[2..5].reverse.pack('C*').unpack('F')
-      puts result
+      # power = @aurora_protocol.send(address, 59, 3)
+      # print power
+      # puts
+      # print power[2..5].reverse
+      # result = power[2..5].reverse.pack('C*').unpack('f')
+      # puts result
+
+      puts read_dsp(address, 3)
     end
+
+    def read_state(address)
+      puts @aurora_protocol.send(address, 50)
+    end
+
+    def read_dsp(address, type)
+      @aurora_protocol.send(address, 59, type)[2..5].reverse.pack('C*').unpack('f')
+    end
+
   end
 end
