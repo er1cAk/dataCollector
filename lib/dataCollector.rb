@@ -1,7 +1,7 @@
-require '../lib/dataCollector/raurora'
+require '../lib/dataCollector/protocols/raurora'
 require '../lib/dataCollector/databaseAdapter'
-require '../lib/dataCollector/auroraRTU'
-require '../lib/dataCollector/modbusRTUviaTCP'
+require '../lib/dataCollector/protocols/auroraRTU'
+require '../lib/dataCollector/protocols/modbusRTUviaTCP'
 
 module DataCollector
 
@@ -12,6 +12,7 @@ module DataCollector
       case device["protocol"]
       when 1
         @protocol = AuroraRTU.new(device["address"])
+        @protocol.connect
       when 2
         @protocol = ModbusRTUviaTCP.new(device["address"])
       else
@@ -21,7 +22,7 @@ module DataCollector
     end
   end
 
-  puts @protocol.read_inverters(@devices)
+  @protocol.read_inverters(@devices)
 
 
 end

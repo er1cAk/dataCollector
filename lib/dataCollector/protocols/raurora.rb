@@ -18,20 +18,20 @@ module DataCollector
       begin
         @socket = Socket.tcp(@hostname, @port, nil, nil, connect_timeout: timeout)
       rescue Errno::ECONNREFUSED, Errno::ETIMEDOUT
-        puts 'Timeout'
+        0
       end
-      @socket
+      1
     end
 
     def disconnect
       @socket.close unless @socket.closed?
     end
 
-    def send(address, command, type = 0, global = 0)
+    def send(address, command, type = 0, global = 1)
       msg = [address, command, type, global, 0, 0, 0, 0]
       crc_16(msg)
       begin
-        Timeout.timeout(1) do
+        Timeout.timeout(2) do
           @socket.write(msg.pack('C*'))
           receive
         end
