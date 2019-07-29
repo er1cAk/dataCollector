@@ -2,6 +2,8 @@ require '../lib/dataCollector/protocols/raurora'
 require '../lib/dataCollector/databaseAdapter'
 require '../lib/dataCollector/protocols/auroraRTU'
 require '../lib/dataCollector/protocols/modbusRTUviaTCP'
+require '../lib/dataCollector/protocols/modbusTCP'
+require 'rmodbus'
 
 module DataCollector
 
@@ -9,20 +11,34 @@ module DataCollector
 
   @devices.select do |device|
     if device["access_point"]
-      case device["protocol"]
-      when 1
-        @protocol = AuroraRTU.new(device["address"])
-        @protocol.connect
-      when 2
-        @protocol = ModbusRTUviaTCP.new(device["address"])
-      else
-        @protocol = nil
+
+      begin
+
+        case device["protocol"]
+        when 1
+          @protocol = AuroraRTU.new(device["address"])
+        when 2
+          begin
+            @protocol = ModbusRTUviaTCP.new(device["address"])
+          rescue Errno::ECONNREFUSED
+            puts 'errno 2'
+          end
+        when 3
+          @protocol = ModBusTCP.new(device["address"])
+        else
+          @protocol = nil
+        end
+
+      rescue Errno::ECONNREFUSED
+        puts "Device \"#{device["device_id"]}\" with address #{device["address"]} conn refused!"
       end
+
       @devices.delete(device)
     end
   end
 
-  @protocol.read_inverters(@devices)
-
+  if @protocol
+    @protocol.read_inverters(@devices)
+  end
 
 end

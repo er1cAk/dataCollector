@@ -10,17 +10,13 @@ module DataCollector
     def initialize(hostname, port = 4001)
       @hostname = hostname
       @port = port
+      aurora_connect
     end
 
-    def connect
+    def aurora_connect
       opts = {}
       timeout = opts[:connect_timeout] ||= 1
-      begin
-        @socket = Socket.tcp(@hostname, @port, nil, nil, connect_timeout: timeout)
-      rescue Errno::ECONNREFUSED, Errno::ETIMEDOUT
-        0
-      end
-      1
+      @socket = Socket.tcp(@hostname, @port, nil, nil, connect_timeout: timeout)
     end
 
     def disconnect
@@ -30,13 +26,9 @@ module DataCollector
     def send(address, command, type = 0, global = 1)
       msg = [address, command, type, global, 0, 0, 0, 0]
       crc_16(msg)
-      begin
-        Timeout.timeout(2) do
-          @socket.write(msg.pack('C*'))
-          receive
-        end
-      rescue Timeout::Error
-        puts 'req/response timeout'
+      Timeout.timeout(2) do
+        @socket.write(msg.pack('C*'))
+        receive
       end
     end
 
