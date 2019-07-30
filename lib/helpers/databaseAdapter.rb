@@ -1,14 +1,10 @@
 require 'excon'
 require 'json'
 
-module DataCollector
+module Helpers
   class DatabaseAdapter
-    @config
-    @con
-    @token
-
     def initialize
-      @config = JSON.parse(File.read('../config.json'))
+      @config = JSON.parse(File.read('./config.json'))
       @token = get_token
     end
 
@@ -16,10 +12,6 @@ module DataCollector
       response = Excon.get(@config["API_URL"] + '/collectordevices?plant_id=eq.' + pw_id.to_s,
                            :headers => {:Authorization => 'Bearer ' + @token})
       JSON.parse(response.body)
-    end
-
-    def write_data
-
     end
 
     def get_token

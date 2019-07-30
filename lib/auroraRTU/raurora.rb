@@ -1,8 +1,7 @@
-# frozen_string_literal: true
 require 'digest/crc16_qt'
 require 'timeout'
 
-module DataCollector
+module AuroraRTU
   class AuroraProtocol
 
     RESPONSE_SIZE = 8

@@ -1,3 +1,7 @@
+require './lib/auroraRTU/auroraRTU'
+
 module DataCollector
-  VERSION = "0.1.0"
+  include Helpers
+  include AuroraRTU
+  VERSION = "0.1.1"
 end

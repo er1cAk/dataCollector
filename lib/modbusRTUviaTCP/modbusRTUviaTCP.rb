@@ -27,7 +27,7 @@ module DataCollector
     def read_current
 
     end
-
+    
     def alarm_one
 
     end

@@ -1,8 +1,9 @@
-require '../lib/dataCollector/protocols/raurora'
-require '../lib/dataCollector/inverter'
+require './lib/auroraRTU/constantsAurora'
 
-module DataCollector
+module AuroraRTU
   class AuroraRTU
+    include Helpers
+
     def initialize(ip_address)
       @aurora_protocol = AuroraProtocol.new(ip_address)
     end
@@ -25,15 +26,15 @@ module DataCollector
     end
 
     def read_voltage
-      read_dsp(1)
+      read_dsp(GRID_VOLTAGE)
     end
 
     def read_current
-      read_dsp(2)
+      read_dsp(GRID_CURRENT)
     end
 
     def read_power
-      read_dsp(3)
+      read_dsp(GRID_POWER)
     end
 
     def read_state

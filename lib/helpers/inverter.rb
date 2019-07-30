@@ -1,4 +1,4 @@
-module DataCollector
+module Helpers
   class Inverter
     attr_accessor :id, :power, :voltage, :current, :state, :alarms
 
