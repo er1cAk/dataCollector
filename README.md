@@ -1,8 +1,20 @@
 # DataCollector
 
-DataCollector is ruby script written for data collection from power plants witch communicate through various of communication protocols. DataCollector supporting ModbusRTUviaTCP, ModbusTCP, Aurora protocol. 
+DataCollector is ruby script written for data collection from power plants witch communicate through various of communication protocols. DataCollector supporting ModbusRTUviaTCP, ModbusTCP, Aurora protocol.
+
+## Prepare
+
+_config.json_ 
+```
+{
+  "API_URL" : "url_to_api",
+  "email" : "login@email.com",
+  "pass" : "loginPassword"
+}
+```
 
 ## Installation
+
 
 ```
 git clone git@github.com:ErikDvorcak/dataCollector.git

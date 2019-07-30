@@ -1,8 +1,7 @@
-# frozen_string_literal: true
 require 'digest/crc16_qt'
 require 'timeout'
 
-module DataCollector
+module AuroraRTU
   class AuroraProtocol
 
     RESPONSE_SIZE = 8
@@ -10,33 +9,25 @@ module DataCollector
     def initialize(hostname, port = 4001)
       @hostname = hostname
       @port = port
+      aurora_connect
     end
 
-    def connect
+    def aurora_connect
       opts = {}
       timeout = opts[:connect_timeout] ||= 1
-      begin
-        @socket = Socket.tcp(@hostname, @port, nil, nil, connect_timeout: timeout)
-      rescue Errno::ECONNREFUSED, Errno::ETIMEDOUT
-        puts 'Timeout'
-      end
-      @socket
+      @socket = Socket.tcp(@hostname, @port, nil, nil, connect_timeout: timeout)
     end
 
     def disconnect
       @socket.close unless @socket.closed?
     end
 
-    def send(address, command, type = 0, global = 0)
+    def send(address, command, type = 0, global = 1)
       msg = [address, command, type, global, 0, 0, 0, 0]
       crc_16(msg)
-      begin
-        Timeout.timeout(1) do
-          @socket.write(msg.pack('C*'))
-          receive
-        end
-      rescue Timeout::Error
-        puts 'req/response timeout'
+      Timeout.timeout(2) do
+        @socket.write(msg.pack('C*'))
+        receive
       end
     end
 
