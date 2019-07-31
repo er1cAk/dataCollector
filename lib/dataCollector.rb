@@ -1,8 +1,5 @@
 require './lib/helpers/databaseAdapter'
 require './lib/dataCollector/version'
-require './lib/modbusRTUviaTCP/modbusRTUviaTCP'
-require './lib/modbusTCP/modbusTCP'
-require 'rmodbus'
 
 module DataCollector
 

@@ -1,5 +1,5 @@
 require 'rmodbus'
-module DataCollector
+module ModBusProtocol
   class ModBusTCP
     def initialize(ip_address)
       @cl = ModBus::TCPClient.connect(ip_address, 502)

@@ -1,6 +1,6 @@
 require 'rmodbus'
 
-module DataCollector
+module ModBusProtocol
   class ModbusRTUviaTCP
     def initialize(ip_address)
       @cl = ModBus::RTUViaTCPClient.connect(ip_address, 1001)

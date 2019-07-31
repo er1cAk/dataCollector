@@ -2,6 +2,7 @@ require "test_helper"
 require_relative "../lib/helpers/databaseAdapter"
 
 class DataCollectorTest < Minitest::Test
+  include Helpers
 
   def test_that_it_has_a_version_number
     refute_nil ::DataCollector::VERSION
